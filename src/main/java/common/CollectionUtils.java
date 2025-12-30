@@ -1,11 +1,6 @@
 package common;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -36,5 +31,23 @@ public class CollectionUtils {
         }
         Set<Object> seen = new HashSet<>();
         return list.stream().filter(element -> seen.add(keyExtractor.apply(element))).collect(Collectors.toList());
+    }
+
+    public static <T> List<List<T>> partition(List<T> list, int batchSize) {
+        if (list == null || list.isEmpty()) {
+            return List.of();
+        }
+        if (batchSize <= 0) {
+            throw new IllegalArgumentException("batchSize must be greater than 0");
+        }
+
+        List<List<T>> result = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += batchSize) {
+            result.add(list.subList(
+                    i,
+                    Math.min(i + batchSize, list.size())
+            ));
+        }
+        return result;
     }
 }
